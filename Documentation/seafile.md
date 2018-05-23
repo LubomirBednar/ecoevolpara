@@ -111,13 +111,17 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8756C4F76
 Then add the repo itself with:
 ```
 echo deb http://dl.bintray.com/seafile-org/deb jessie main | sudo tee /etc/apt/sources.list.d/seafile.list
+``` 
+or
+```
+echo deb http://deb.seadrive.org stretch main | sudo tee /etc/apt/sources.list.d/seafile.list
 ```
 Replace jessie with the Debian release you're using (`lsb_release -a | grep Codename`).
 Then run an update of the package-list.
 ```
 sudo aptitude update
 ```
-Download libssl1.0, which is required by the client, and install it:
+Download libssl1.0, which is required by the client, and install it (This version is now unavalable and the sync works without it so its possible to skip it):
 ```
 wget http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u6_amd64.deb
 	sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u6_amd64.deb
@@ -134,7 +138,7 @@ Then you need to change the permissions:
 ```
 sudo chown $USER:$USER /home/seafile/$USER /etc/seafile/$USER
 ```
-Now download the ignore-list to the local directory you want to sync:
+Now download the ignore-list to the local directory you want to sync (not necessary):
 ```
 wget https://raw.githubusercontent.com/majuss/ecoevolpara/master/latest/docs/source/appendix/scripts/seafile-ignore.txt -P /home/$USER
 ```
@@ -142,17 +146,19 @@ Initialise the seafile-client with:
 ```
 seaf-cli init -c /etc/seafile/$USER/conf_dir -d /home/seafile/$USER
 seaf-cli start -c /etc/seafile/$USER/conf_dir
-seaf-cli sync -l "$seafile_library_id" -s https://svalbard.biologie.hu-berlin.de -d "$local_directory_to_sync" -c /etc/seafile/$USER/conf_dir -u "$seafile_login_email" -p "$login_password"
+seaf-cli sync -l "$seafile_library_id" -s https://svalbard.biologie.hu-berlin.de -d "$local_directory_to_sync" -c /etc/seafile/$USER/conf_dir -u "$seafile_login_email" -p '$login_password'
 ```
 Save a startup script and setup a cronjob
 ```
 sudo echo -e "seaf-cli start -c /etc/seafile/$USER/conf_dir" > /home/$USER/start_$USER.sh
-sudo cp start_marius.sh /usr/local/bin/seafile_startup/
+sudo cp start_$USER.sh /usr/local/bin/seafile_startup/
 sudo chown $USER:$USER /usr/local/bin/seafile_startup/start_$USER.sh
 ```
 Run `crontab -e` and enter:
 ```
 @reboot bash /usr/local/bin/seafile_startup/start_$your_username.sh
+```
+Press Ctrl + O to save, press Enter, exit with Ctrl + X
 ```
 To check the status of the client run:
 ```
