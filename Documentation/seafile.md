@@ -110,11 +110,7 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 8756C4F76
 ```
 Then add the repo itself with:
 ```
-echo deb http://dl.bintray.com/seafile-org/deb jessie main | sudo tee /etc/apt/sources.list.d/seafile.list
-``` 
-or
-```
-echo deb http://deb.seadrive.org stretch main | sudo tee /etc/apt/sources.list.d/seafile.list
+echo deb http://deb.seadrive.org jessie main | sudo tee /etc/apt/sources.list.d/seafile.list
 ```
 Replace jessie with the Debian release you're using (`lsb_release -a | grep Codename`).
 Then run an update of the package-list.
